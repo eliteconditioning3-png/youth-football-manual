@@ -11,7 +11,7 @@ const Index = () => {
       <div className="fixed inset-0 bg-mesh pointer-events-none -z-10" />
       
       {/* Hero Section */}
-      <div className="relative -mx-6 -mt-8 lg:-mx-8 lg:-mt-12 px-6 py-20 lg:px-8 lg:py-28 bg-gradient-hero text-foreground mb-12 rounded-b-[2rem] overflow-hidden">
+      <div className="relative -mx-4 -mt-6 sm:-mx-6 sm:-mt-8 lg:-mx-8 lg:-mt-12 px-4 sm:px-6 py-14 sm:py-20 lg:px-8 lg:py-28 ...">
         {/* Decorative Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/3" />
@@ -22,13 +22,13 @@ const Index = () => {
             <span className="text-sm font-medium text-primary">Priručnik za trenere</span>
           </div>
           
-          <h1 className="font-display text-white text-4xl md:text-5xl lg:text-6xl tracking-tight mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl ...">
            STRENGTH & CONDITIONING
            <br />
            <span className="text-primary">ZA MLADE NOGOMETAŠE</span>
           </h1>
           
-          <p className="text-lg text-muted-foreground max-w-2xl mb-10 leading-relaxed">
+          <p className="text-base sm:text-lg ...">
             Znanstveno utemeljene smjernice za razvoj mladih sportaša. 
             15 poglavlja, interaktivni kalkulatori i praktične checkliste.
           </p>
@@ -54,7 +54,7 @@ const Index = () => {
       <div className="grid md:grid-cols-3 gap-6 mb-16">
         <Link 
           to="/kalkulatori" 
-          className="group glass-card p-6 rounded-2xl"
+          className="group glass-card p-4 sm:p-6 rounded-2xl"
         >
           <div className="w-14 h-14 rounded-xl bg-gradient-primary flex items-center justify-center mb-5 shadow-glow/50 group-hover:scale-110 transition-transform">
             <Calculator className="h-7 w-7 text-primary-foreground" />

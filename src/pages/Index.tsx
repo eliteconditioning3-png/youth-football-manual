@@ -22,10 +22,10 @@ const Index = () => {
             <span className="text-sm font-medium text-primary">Priručnik za trenere</span>
           </div>
           
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl tracking-tight mb-6 text-foreground">
-            STRENGTH & CONDITIONING
-            <br />
-            <span className="text-gradient-primary">ZA MLADE NOGOMETAŠE</span>
+          <h1 className="font-display text-white text-4xl md:text-5xl lg:text-6xl tracking-tight mb-6">
+           STRENGTH & CONDITIONING
+           <br />
+           <span className="text-primary">ZA MLADE NOGOMETAŠE</span>
           </h1>
           
           <p className="text-lg text-muted-foreground max-w-2xl mb-10 leading-relaxed">

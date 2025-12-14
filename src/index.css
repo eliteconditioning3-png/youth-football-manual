@@ -158,6 +158,14 @@
     @apply border-border;
   }
 
+  /* IMPORTANT for Wix iframe + mobile: prevent horizontal overflow */
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;

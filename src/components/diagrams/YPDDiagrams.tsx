@@ -108,7 +108,7 @@ export function YPDDiagrams() {
   const [selectedPhase, setSelectedPhase] = useState<"prePHV" | "phv" | "postPHV">("prePHV");
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Main Tabs */}
       <Tabs defaultValue="growth" className="w-full">
         <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/50 border border-border/50">
@@ -137,19 +137,19 @@ export function YPDDiagrams() {
         {/* PHV Growth Curve */}
         <TabsContent value="growth" className="mt-6">
           <Card className="bg-card/30 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-primary" />
                 Krivulja brzine rasta (PHV)
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Prosječna brzina rasta u visinu (cm/godišnje) kroz adolescenciju. PHV označava period najbržeg rasta.
               </p>
             </CardHeader>
             <CardContent>
-              <div className="h-[350px] w-full">
+              <div className="h-[220px] sm:h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={growthCurveData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+                  <AreaChart data={growthCurveData} margin={{ top: 16, right: 20, left: 0, bottom: 16 }}>
                     <defs>
                       <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
@@ -160,13 +160,13 @@ export function YPDDiagrams() {
                     <XAxis
                       dataKey="age"
                       stroke="hsl(var(--muted-foreground))"
-                      fontSize={12}
+                      fontSize={11}
                       tickLine={false}
                       label={{ value: "Dob (godine)", position: "bottom", offset: 0, fill: "hsl(var(--muted-foreground))" }}
                     />
                     <YAxis
                       stroke="hsl(var(--muted-foreground))"
-                      fontSize={12}
+                      fontSize={11}
                       tickLine={false}
                       label={{ value: "cm/god", angle: -90, position: "insideLeft", fill: "hsl(var(--muted-foreground))" }}
                     />
@@ -190,20 +190,20 @@ export function YPDDiagrams() {
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-              
+
               {/* Phase Legend */}
-              <div className="flex flex-wrap justify-center gap-4 mt-6 pt-4 border-t border-border/30">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-4 sm:mt-6 pt-4 border-t border-border/30">
+                <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30">
                   <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                  <span className="text-sm font-medium text-emerald-400">Pre-PHV (8-11)</span>
+                  <span className="text-xs sm:text-sm font-medium text-emerald-400">Pre-PHV (8-11)</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30">
+                <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30">
                   <div className="w-3 h-3 rounded-full bg-amber-500" />
-                  <span className="text-sm font-medium text-amber-400">PHV (12-14)</span>
+                  <span className="text-xs sm:text-sm font-medium text-amber-400">PHV (12-14)</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30">
+                <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30">
                   <div className="w-3 h-3 rounded-full bg-blue-500" />
-                  <span className="text-sm font-medium text-blue-400">Post-PHV (15+)</span>
+                  <span className="text-xs sm:text-sm font-medium text-blue-400">Post-PHV (15+)</span>
                 </div>
               </div>
             </CardContent>
@@ -213,28 +213,28 @@ export function YPDDiagrams() {
         {/* Trainability Windows */}
         <TabsContent value="trainability" className="mt-6">
           <Card className="bg-card/30 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
                 <Layers className="w-5 h-5 text-primary" />
                 Prozori trenabilnosti
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Relativna učinkovitost treninga različitih fizičkih kvaliteta kroz faze razvoja (%).
               </p>
             </CardHeader>
             <CardContent>
-              <div className="h-[400px] w-full">
+              <div className="h-[260px] sm:h-[400px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={trainabilityData}
                     layout="vertical"
-                    margin={{ top: 20, right: 30, left: 100, bottom: 20 }}
+                    margin={{ top: 16, right: 16, left: 56, bottom: 16 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
                     <XAxis
                       type="number"
                       stroke="hsl(var(--muted-foreground))"
-                      fontSize={12}
+                      fontSize={11}
                       domain={[0, 100]}
                       tickFormatter={(v) => `${v}%`}
                     />
@@ -242,8 +242,8 @@ export function YPDDiagrams() {
                       type="category"
                       dataKey="quality"
                       stroke="hsl(var(--muted-foreground))"
-                      fontSize={11}
-                      width={95}
+                      fontSize={10}
+                      width={78}
                       tickLine={false}
                     />
                     <Tooltip
@@ -263,6 +263,7 @@ export function YPDDiagrams() {
                       }}
                     />
                     <Legend
+                      wrapperStyle={{ fontSize: 11 }}
                       formatter={(value) => {
                         const labels: Record<string, string> = {
                           prePHV: "Pre-PHV",
@@ -285,21 +286,21 @@ export function YPDDiagrams() {
         {/* Phase Priorities Radar */}
         <TabsContent value="priorities" className="mt-6">
           <Card className="bg-card/30 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
                 <Target className="w-5 h-5 text-primary" />
                 Prioriteti po fazama razvoja
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Relativni prioritet treninga različitih kvaliteta u svakoj fazi. Veća površina = veći prioritet.
               </p>
             </CardHeader>
             <CardContent>
               {/* Phase Selector */}
-              <div className="flex justify-center gap-2 mb-6">
+              <div className="flex justify-center flex-wrap gap-2 mb-4 sm:mb-6">
                 <button
                   onClick={() => setSelectedPhase("prePHV")}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition-all ${
                     selectedPhase === "prePHV"
                       ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/50"
                       : "bg-card/50 text-muted-foreground border border-border/50 hover:border-border"
@@ -309,7 +310,7 @@ export function YPDDiagrams() {
                 </button>
                 <button
                   onClick={() => setSelectedPhase("phv")}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition-all ${
                     selectedPhase === "phv"
                       ? "bg-amber-500/20 text-amber-400 border border-amber-500/50"
                       : "bg-card/50 text-muted-foreground border border-border/50 hover:border-border"
@@ -319,7 +320,7 @@ export function YPDDiagrams() {
                 </button>
                 <button
                   onClick={() => setSelectedPhase("postPHV")}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition-all ${
                     selectedPhase === "postPHV"
                       ? "bg-blue-500/20 text-blue-400 border border-blue-500/50"
                       : "bg-card/50 text-muted-foreground border border-border/50 hover:border-border"
@@ -329,18 +330,21 @@ export function YPDDiagrams() {
                 </button>
               </div>
 
-              <div className="h-[350px] w-full">
+              <div className="h-[240px] sm:h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart data={phasePrioritiesData[selectedPhase]} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+                  <RadarChart
+                    data={phasePrioritiesData[selectedPhase]}
+                    margin={{ top: 16, right: 18, bottom: 16, left: 18 }}
+                  >
                     <PolarGrid stroke="hsl(var(--border))" />
                     <PolarAngleAxis
                       dataKey="subject"
-                      tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                      tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
                     />
                     <PolarRadiusAxis
                       angle={30}
                       domain={[0, 100]}
-                      tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
+                      tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 9 }}
                     />
                     <Radar
                       name="Prioritet"
@@ -364,22 +368,22 @@ export function YPDDiagrams() {
               </div>
 
               {/* Phase Description */}
-              <div className="mt-4 p-4 rounded-lg bg-muted/20 border border-border/30">
+              <div className="mt-4 p-3 sm:p-4 rounded-lg bg-muted/20 border border-border/30">
                 {selectedPhase === "prePHV" && (
-                  <p className="text-sm text-muted-foreground">
-                    <strong className="text-emerald-400">Pre-PHV faza:</strong> Naglasak na fundamentalnim motoričkim vještinama, 
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    <strong className="text-emerald-400">Pre-PHV faza:</strong> Naglasak na fundamentalnim motoričkim vještinama,
                     koordinaciji i ravnoteži. Idealno vrijeme za razvoj širokog atletskog temelja kroz raznovrsne aktivnosti i igru.
                   </p>
                 )}
                 {selectedPhase === "phv" && (
-                  <p className="text-sm text-muted-foreground">
-                    <strong className="text-amber-400">PHV faza:</strong> Period ubrzanog rasta zahtijeva fokus na fleksibilnost 
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    <strong className="text-amber-400">PHV faza:</strong> Period ubrzanog rasta zahtijeva fokus na fleksibilnost
                     i održavanje. Smanjite volumen i intenzitet, izbjegavajte preopterećenje dok tijelo prolazi kroz strukturalne promjene.
                   </p>
                 )}
                 {selectedPhase === "postPHV" && (
-                  <p className="text-sm text-muted-foreground">
-                    <strong className="text-blue-400">Post-PHV faza:</strong> Optimalno vrijeme za razvoj snage, brzine i eksplozivnosti. 
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    <strong className="text-blue-400">Post-PHV faza:</strong> Optimalno vrijeme za razvoj snage, brzine i eksplozivnosti.
                     Tijelo je spremno za veća opterećenja, ali tehnika i postupnost ostaju prioriteti.
                   </p>
                 )}
@@ -391,28 +395,28 @@ export function YPDDiagrams() {
         {/* YPD Principles Visual */}
         <TabsContent value="principles" className="mt-6">
           <Card className="bg-card/30 backdrop-blur-sm border-border/50">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold flex items-center gap-2">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
                 <Activity className="w-5 h-5 text-primary" />
                 10 temeljnih principa YPD modela
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Vizualni prikaz ključnih principa koji vode fizički razvoj mladih sportaša.
               </p>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                 {principlesData.map((principle) => (
                   <div
                     key={principle.id}
-                    className="relative group p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all hover:scale-105"
+                    className="relative group p-3 sm:p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all hover:scale-105"
                   >
                     <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
                       {principle.id}
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl mb-2">{principle.icon}</div>
-                      <p className="text-xs font-medium text-foreground leading-tight">
+                      <div className="text-xl sm:text-2xl mb-2">{principle.icon}</div>
+                      <p className="text-[11px] sm:text-xs font-medium text-foreground leading-tight">
                         {principle.name}
                       </p>
                     </div>
@@ -428,10 +432,10 @@ export function YPDDiagrams() {
               </div>
 
               {/* Key Takeaway */}
-              <div className="mt-6 p-4 rounded-lg bg-primary/10 border border-primary/30">
-                <p className="text-sm text-center text-muted-foreground">
-                  <strong className="text-primary">Ključna poruka:</strong> YPD model naglašava da je fizički razvoj 
-                  <em> kontinuiran proces</em> koji zahtijeva <em>individualizirani pristup</em>, strpljenje i 
+              <div className="mt-6 p-3 sm:p-4 rounded-lg bg-primary/10 border border-primary/30">
+                <p className="text-xs sm:text-sm text-center text-muted-foreground">
+                  <strong className="text-primary">Ključna poruka:</strong> YPD model naglašava da je fizički razvoj
+                  <em> kontinuiran proces</em> koji zahtijeva <em>individualizirani pristup</em>, strpljenje i
                   dugoročnu viziju umjesto kratkoročnih rezultata.
                 </p>
               </div>

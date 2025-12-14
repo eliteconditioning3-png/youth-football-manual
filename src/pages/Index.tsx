@@ -24,13 +24,13 @@ const Index = () => {
             </span>
           </div>
 
-          <h1 className="font-display text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight mb-4 sm:mb-6">
+          <h1 className="font-display text-foreground text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight mb-4 sm:mb-6">
             STRENGTH & CONDITIONING
             <br />
-            <span className="text-white">ZA MLADE NOGOMETAŠE</span>
+           <span className="text-primary">ZA MLADE NOGOMETAŠE</span>
           </h1>
 
-          <p className="text-sm sm:text-base md:text-lg text-white/90 max-w-2xl mb-6 sm:mb-8">
+          <p className="text-sm sm:text-base md:text-lg text-foreground/80 max-w-2xl mb-6 sm:mb-8">
             Znanstveno utemeljene smjernice za razvoj mladih sportaša. 15 poglavlja,
             interaktivni kalkulatori i praktične checkliste.
           </p>

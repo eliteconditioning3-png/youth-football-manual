@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
+  Line,
   BarChart,
   Bar,
   Legend,
@@ -108,10 +109,12 @@ export function YPDDiagrams() {
   const [growthFocus, setGrowthFocus] = useState<GrowthFocus>("all");
 
   // Split the growth curve into 3 series so colors can differ per phase
+  // PLUS add "velocity" for a single continuous curve
   const growthSeriesData = useMemo(() => {
     return growthCurveData.map((d) => ({
       age: d.age,
       phase: d.phase,
+      velocity: d.velocity, // continuous line across all ages
       pre: d.phase === "Pre-PHV" ? d.velocity : null,
       phv: d.phase === "PHV" ? d.velocity : null,
       post: d.phase === "Post-PHV" ? d.velocity : null,
@@ -192,13 +195,23 @@ export function YPDDiagrams() {
                       stroke="hsl(var(--muted-foreground))"
                       fontSize={11}
                       tickLine={false}
-                      label={{ value: "Dob (godine)", position: "bottom", offset: 0, fill: "hsl(var(--muted-foreground))" }}
+                      label={{
+                        value: "Dob (godine)",
+                        position: "bottom",
+                        offset: 0,
+                        fill: "hsl(var(--muted-foreground))",
+                      }}
                     />
                     <YAxis
                       stroke="hsl(var(--muted-foreground))"
                       fontSize={11}
                       tickLine={false}
-                      label={{ value: "cm/god", angle: -90, position: "insideLeft", fill: "hsl(var(--muted-foreground))" }}
+                      label={{
+                        value: "cm/god",
+                        angle: -90,
+                        position: "insideLeft",
+                        fill: "hsl(var(--muted-foreground))",
+                      }}
                     />
 
                     <Tooltip
@@ -210,6 +223,16 @@ export function YPDDiagrams() {
                       }}
                       formatter={(value: number) => [`${value} cm/god`, "Brzina rasta"]}
                       labelFormatter={(label) => `Dob: ${label} godina`}
+                    />
+
+                    {/* Continuous curve (no breaks) */}
+                    <Line
+                      type="monotone"
+                      dataKey="velocity"
+                      stroke="hsl(var(--foreground))"
+                      strokeWidth={2.5}
+                      dot={false}
+                      opacity={0.85}
                     />
 
                     <Area

@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,7 +9,6 @@ import {
   Area,
   BarChart,
   Bar,
-  Cell,
   Legend,
   RadarChart,
   PolarGrid,
@@ -104,12 +101,34 @@ const PhaseColors = {
   postPHV: "#3b82f6",
 };
 
+type GrowthFocus = "all" | "prePHV" | "phv" | "postPHV";
+
 export function YPDDiagrams() {
   const [selectedPhase, setSelectedPhase] = useState<"prePHV" | "phv" | "postPHV">("prePHV");
+  const [growthFocus, setGrowthFocus] = useState<GrowthFocus>("all");
+
+  // Split the growth curve into 3 series so colors can differ per phase
+  const growthSeriesData = useMemo(() => {
+    return growthCurveData.map((d) => ({
+      age: d.age,
+      phase: d.phase,
+      pre: d.phase === "Pre-PHV" ? d.velocity : null,
+      phv: d.phase === "PHV" ? d.velocity : null,
+      post: d.phase === "Post-PHV" ? d.velocity : null,
+    }));
+  }, []);
+
+  const toggleFocus = (next: GrowthFocus) => {
+    setGrowthFocus((current) => (current === next ? "all" : next));
+  };
+
+  const areaOpacity = (key: GrowthFocus) => {
+    if (growthFocus === "all") return 1;
+    return growthFocus === key ? 1 : 0.12;
+  };
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Main Tabs */}
       <Tabs defaultValue="growth" className="w-full">
         <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/50 border border-border/50">
           <TabsTrigger value="growth" className="flex items-center gap-2">
@@ -143,20 +162,31 @@ export function YPDDiagrams() {
                 Krivulja brzine rasta (PHV)
               </CardTitle>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Prosječna brzina rasta u visinu (cm/godišnje) kroz adolescenciju. PHV označava period najbržeg rasta.
+                Klikni fazu (Pre-PHV / PHV / Post-PHV) za fokus na segment krivulje.
               </p>
             </CardHeader>
+
             <CardContent>
               <div className="h-[220px] sm:h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={growthCurveData} margin={{ top: 16, right: 20, left: 0, bottom: 16 }}>
+                  <AreaChart data={growthSeriesData} margin={{ top: 16, right: 16, left: 0, bottom: 16 }}>
                     <defs>
-                      <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                      <linearGradient id="preGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={PhaseColors.prePHV} stopOpacity={0.35} />
+                        <stop offset="95%" stopColor={PhaseColors.prePHV} stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="phvGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={PhaseColors.phv} stopOpacity={0.35} />
+                        <stop offset="95%" stopColor={PhaseColors.phv} stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="postGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor={PhaseColors.postPHV} stopOpacity={0.35} />
+                        <stop offset="95%" stopColor={PhaseColors.postPHV} stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.25} />
+
                     <XAxis
                       dataKey="age"
                       stroke="hsl(var(--muted-foreground))"
@@ -170,6 +200,7 @@ export function YPDDiagrams() {
                       tickLine={false}
                       label={{ value: "cm/god", angle: -90, position: "insideLeft", fill: "hsl(var(--muted-foreground))" }}
                     />
+
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "hsl(var(--card))",
@@ -180,31 +211,78 @@ export function YPDDiagrams() {
                       formatter={(value: number) => [`${value} cm/god`, "Brzina rasta"]}
                       labelFormatter={(label) => `Dob: ${label} godina`}
                     />
+
                     <Area
                       type="monotone"
-                      dataKey="velocity"
-                      stroke="#10b981"
+                      dataKey="pre"
+                      stroke={PhaseColors.prePHV}
                       strokeWidth={3}
-                      fill="url(#growthGradient)"
+                      fill="url(#preGrad)"
+                      connectNulls
+                      opacity={areaOpacity("prePHV")}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="phv"
+                      stroke={PhaseColors.phv}
+                      strokeWidth={3}
+                      fill="url(#phvGrad)"
+                      connectNulls
+                      opacity={areaOpacity("phv")}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="post"
+                      stroke={PhaseColors.postPHV}
+                      strokeWidth={3}
+                      fill="url(#postGrad)"
+                      connectNulls
+                      opacity={areaOpacity("postPHV")}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* Phase Legend */}
+              {/* Clickable Phase Legend */}
               <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-4 sm:mt-6 pt-4 border-t border-border/30">
-                <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30">
-                  <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                <button
+                  type="button"
+                  onClick={() => toggleFocus("prePHV")}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border transition ${
+                    growthFocus === "prePHV"
+                      ? "bg-emerald-500/15 border-emerald-500/50"
+                      : "bg-emerald-500/10 border-emerald-500/30 hover:border-emerald-500/50"
+                  }`}
+                >
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PhaseColors.prePHV }} />
                   <span className="text-xs sm:text-sm font-medium text-emerald-400">Pre-PHV (8-11)</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30">
-                  <div className="w-3 h-3 rounded-full bg-amber-500" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => toggleFocus("phv")}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border transition ${
+                    growthFocus === "phv"
+                      ? "bg-amber-500/15 border-amber-500/50"
+                      : "bg-amber-500/10 border-amber-500/30 hover:border-amber-500/50"
+                  }`}
+                >
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PhaseColors.phv }} />
                   <span className="text-xs sm:text-sm font-medium text-amber-400">PHV (12-14)</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30">
-                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => toggleFocus("postPHV")}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border transition ${
+                    growthFocus === "postPHV"
+                      ? "bg-blue-500/15 border-blue-500/50"
+                      : "bg-blue-500/10 border-blue-500/30 hover:border-blue-500/50"
+                  }`}
+                >
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: PhaseColors.postPHV }} />
                   <span className="text-xs sm:text-sm font-medium text-blue-400">Post-PHV (15+)</span>
-                </div>
+                </button>
               </div>
             </CardContent>
           </Card>
@@ -296,7 +374,6 @@ export function YPDDiagrams() {
               </p>
             </CardHeader>
             <CardContent>
-              {/* Phase Selector */}
               <div className="flex justify-center flex-wrap gap-2 mb-4 sm:mb-6">
                 <button
                   onClick={() => setSelectedPhase("prePHV")}
@@ -332,10 +409,7 @@ export function YPDDiagrams() {
 
               <div className="h-[240px] sm:h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart
-                    data={phasePrioritiesData[selectedPhase]}
-                    margin={{ top: 16, right: 18, bottom: 16, left: 18 }}
-                  >
+                  <RadarChart data={phasePrioritiesData[selectedPhase]} margin={{ top: 16, right: 18, bottom: 16, left: 18 }}>
                     <PolarGrid stroke="hsl(var(--border))" />
                     <PolarAngleAxis
                       dataKey="subject"
@@ -367,7 +441,6 @@ export function YPDDiagrams() {
                 </ResponsiveContainer>
               </div>
 
-              {/* Phase Description */}
               <div className="mt-4 p-3 sm:p-4 rounded-lg bg-muted/20 border border-border/30">
                 {selectedPhase === "prePHV" && (
                   <p className="text-xs sm:text-sm text-muted-foreground">
@@ -392,7 +465,7 @@ export function YPDDiagrams() {
           </Card>
         </TabsContent>
 
-        {/* YPD Principles Visual */}
+        {/* Principles */}
         <TabsContent value="principles" className="mt-6">
           <Card className="bg-card/30 backdrop-blur-sm border-border/50">
             <CardHeader className="space-y-2">
@@ -420,7 +493,6 @@ export function YPDDiagrams() {
                         {principle.name}
                       </p>
                     </div>
-                    {/* Importance bar */}
                     <div className="mt-3 h-1 bg-muted/30 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-primary rounded-full transition-all duration-500"
@@ -431,7 +503,6 @@ export function YPDDiagrams() {
                 ))}
               </div>
 
-              {/* Key Takeaway */}
               <div className="mt-6 p-3 sm:p-4 rounded-lg bg-primary/10 border border-primary/30">
                 <p className="text-xs sm:text-sm text-center text-muted-foreground">
                   <strong className="text-primary">Ključna poruka:</strong> YPD model naglašava da je fizički razvoj
